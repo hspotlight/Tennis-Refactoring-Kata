@@ -8,12 +8,7 @@ export class TennisGame2 implements TennisGame {
   player1ScoreText: string = '';
   player2ScoreText: string = '';
 
-  private player1Name: string;
-  private player2Name: string;
-
   constructor(player1Name: string, player2Name: string) {
-    this.player1Name = player1Name;
-    this.player2Name = player2Name;
   }
 
   getScore(): string {
