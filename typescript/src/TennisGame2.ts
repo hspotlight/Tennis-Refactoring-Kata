@@ -16,9 +16,9 @@ export class TennisGame2 implements TennisGame {
     if (isSameScore) {
       score = this.sameScoreButNotWinCase();
     }
-
-    score = this.onePlayHasZeroScoreCase(score);
-
+    if (this.player1Score === 0 || this.player2Score === 0) {
+      score = this.onePlayerHasZeroScoreCase(score);
+    }
     score = this.advantageOrWinCase(score);
 
     score = this.normalCase(score);
@@ -44,22 +44,26 @@ export class TennisGame2 implements TennisGame {
     return score;
   }
 
-  private onePlayHasZeroScoreCase(score: string) {
-    if (this.player1Score > 0 && this.player2Score === 0) {
-      if (this.player1Score === 1) this.player1ScoreText = "Fifteen";
-      if (this.player1Score === 2) this.player1ScoreText = "Thirty";
-      if (this.player1Score === 3) this.player1ScoreText = "Forty";
+  private onePlayerHasZeroScoreCase(score: string) {
+    if (this.player1Score > 0) {
+      // TODO II: remove data mutation
+      this.player1ScoreText = this.getScoreText(this.player1Score);
       this.player2ScoreText = "Love";
-      score = this.player1ScoreText + "-" + this.player2ScoreText;
+      score = this.getScoreText(this.player1Score) + "-" + "Love";
     }
-    if (this.player2Score > 0 && this.player1Score === 0) {
-      if (this.player2Score === 1) this.player2ScoreText = "Fifteen";
-      if (this.player2Score === 2) this.player2ScoreText = "Thirty";
-      if (this.player2Score === 3) this.player2ScoreText = "Forty";
+    if (this.player2Score > 0) {
+      this.player2ScoreText = this.getScoreText(this.player2Score);
       this.player1ScoreText = "Love";
-      score = this.player1ScoreText + "-" + this.player2ScoreText;
+      score = "Love" + "-" + this.getScoreText(this.player2Score);
     }
+
     return score;
+  }
+
+  private getScoreText(score: number) {
+    if (score === 1) return "Fifteen";
+    if (score === 2) return "Thirty";
+    if (score === 3) return "Forty";
   }
 
   private sameScoreButNotWinCase() {
