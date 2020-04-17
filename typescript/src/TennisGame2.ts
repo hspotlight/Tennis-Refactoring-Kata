@@ -4,9 +4,6 @@ export class TennisGame2 implements TennisGame {
   player1Score: number = 0;
   player2Score: number = 0;
 
-  player1ScoreText: string = "";
-  player2ScoreText: string = "";
-
   constructor(player1Name: string, player2Name: string) {}
 
   getScore(): string {
@@ -15,55 +12,38 @@ export class TennisGame2 implements TennisGame {
     const isSameScore = this.player1Score === this.player2Score;
     if (isSameScore) {
       score = this.sameScoreButNotWinCase();
+    } else {
+      score = this.getScoreBoard(this.player1Score, this.player2Score);
     }
-    if (this.player1Score === 0 || this.player2Score === 0) {
-      score = this.onePlayerHasZeroScoreCase(score);
+    if (this.player1Score >= this.player2Score + 2 && this.player1Score >= 4) {
+      score = "Win for player1";
     }
-    score = this.advantageOrWinCase(score);
-
-    score = this.normalCase(score);
+    else if (this.player2Score >= this.player1Score + 2 && this.player2Score >= 4) {
+      score = "Win for player2";
+    }
+    else if (this.player1Score === this.player2Score + 1 && this.player2Score >= 3) {
+      score = "Advantage player1";
+    }
+    else if (this.player2Score === this.player1Score + 1 && this.player1Score >= 3) {
+      score = "Advantage player2";
+    } else if (this.player1Score > this.player2Score && this.player1Score < 4) {
+      score = this.getScoreBoard(this.player1Score, this.player2Score);
+    } else if (this.player2Score > this.player1Score && this.player2Score < 4) {
+      score = this.getScoreBoard(this.player1Score, this.player2Score);
+    }
 
     return score;
   }
 
-  private normalCase(score: string) {
-    if (this.player1Score > this.player2Score && this.player1Score < 4) {
-      if (this.player1Score === 2) this.player1ScoreText = "Thirty";
-      if (this.player1Score === 3) this.player1ScoreText = "Forty";
-      if (this.player2Score === 1) this.player2ScoreText = "Fifteen";
-      if (this.player2Score === 2) this.player2ScoreText = "Thirty";
-      score = this.player1ScoreText + "-" + this.player2ScoreText;
-    }
-    if (this.player2Score > this.player1Score && this.player2Score < 4) {
-      if (this.player2Score === 2) this.player2ScoreText = "Thirty";
-      if (this.player2Score === 3) this.player2ScoreText = "Forty";
-      if (this.player1Score === 1) this.player1ScoreText = "Fifteen";
-      if (this.player1Score === 2) this.player1ScoreText = "Thirty";
-      score = this.player1ScoreText + "-" + this.player2ScoreText;
-    }
-    return score;
-  }
-
-  private onePlayerHasZeroScoreCase(score: string) {
-    if (this.player1Score > 0) {
-      // TODO II: remove data mutation
-      this.player1ScoreText = this.getScoreText(this.player1Score);
-      this.player2ScoreText = "Love";
-      score = this.getScoreText(this.player1Score) + "-" + "Love";
-    }
-    if (this.player2Score > 0) {
-      this.player2ScoreText = this.getScoreText(this.player2Score);
-      this.player1ScoreText = "Love";
-      score = "Love" + "-" + this.getScoreText(this.player2Score);
-    }
-
-    return score;
+  private getScoreBoard(player1Score: number, player2Score: number) {
+    return this.getScoreText(player1Score) + "-" + this.getScoreText(player2Score);
   }
 
   private getScoreText(score: number) {
     if (score === 1) return "Fifteen";
     if (score === 2) return "Thirty";
     if (score === 3) return "Forty";
+    if (score === 0) return "Love";
   }
 
   private sameScoreButNotWinCase() {
@@ -77,30 +57,6 @@ export class TennisGame2 implements TennisGame {
       default:
         return "Deuce";
     }
-  }
-
-  private advantageOrWinCase(score: string) {
-    if (this.player1Score > this.player2Score && this.player2Score >= 3) {
-      score = "Advantage player1";
-    }
-    if (this.player2Score > this.player1Score && this.player1Score >= 3) {
-      score = "Advantage player2";
-    }
-    if (
-      this.player1Score >= 4 &&
-      this.player2Score >= 0 &&
-      this.player1Score - this.player2Score >= 2
-    ) {
-      score = "Win for player1";
-    }
-    if (
-      this.player2Score >= 4 &&
-      this.player1Score >= 0 &&
-      this.player2Score - this.player1Score >= 2
-    ) {
-      score = "Win for player2";
-    }
-    return score;
   }
 
   private updatePlayer1Score(): void {
