@@ -59,16 +59,8 @@ export class TennisGame2 implements TennisGame {
     }
   }
 
-  private updatePlayer1Score(): void {
-    this.player1Score++;
-  }
-
-  private updatePlayer2Score(): void {
-    this.player2Score++;
-  }
-
   public wonPoint(player: string): void {
-    if (player === "player1") this.updatePlayer1Score();
-    else this.updatePlayer2Score();
+    if (player === "player1") this.player1Score++;
+    else this.player2Score++;
   }
 }
