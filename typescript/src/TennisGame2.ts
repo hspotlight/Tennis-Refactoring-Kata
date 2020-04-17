@@ -7,32 +7,30 @@ export class TennisGame2 implements TennisGame {
   constructor(player1Name: string, player2Name: string) {}
 
   getScore(): string {
-    let score: string = "";
-    // TODO I: order is important
     const isSameScore = this.player1Score === this.player2Score;
     if (isSameScore) {
-      score = this.sameScoreButNotWinCase();
-    } else {
-      score = this.getScoreBoard(this.player1Score, this.player2Score);
+      return this.sameScoreButNotWinCase();
+    } else if (this.player1Score >= 4 || this.player2Score >= 4) {
+      return this.advantageOrWinnerCase();
     }
-    if (this.player1Score >= this.player2Score + 2 && this.player1Score >= 4) {
-      score = "Win for player1";
-    }
-    else if (this.player2Score >= this.player1Score + 2 && this.player2Score >= 4) {
-      score = "Win for player2";
-    }
-    else if (this.player1Score === this.player2Score + 1 && this.player2Score >= 3) {
-      score = "Advantage player1";
-    }
-    else if (this.player2Score === this.player1Score + 1 && this.player1Score >= 3) {
-      score = "Advantage player2";
-    } else if (this.player1Score > this.player2Score && this.player1Score < 4) {
-      score = this.getScoreBoard(this.player1Score, this.player2Score);
-    } else if (this.player2Score > this.player1Score && this.player2Score < 4) {
-      score = this.getScoreBoard(this.player1Score, this.player2Score);
-    }
+    
+    return this.getScoreBoard(this.player1Score, this.player2Score);
+  }
 
-    return score;
+  private advantageOrWinnerCase() {
+    const minusResult = this.player1Score - this.player2Score;
+    if (minusResult === 1 && this.player2Score >= 3) {
+      return "Advantage player1";
+    }
+    else if (minusResult === -1 && this.player1Score >= 3) {
+      return "Advantage player2";
+    }
+    else if (minusResult >= 2 && this.player1Score >= 3) {
+      return "Win for player1";
+    }
+    else if (minusResult <= -2 && this.player2Score >= 3) {
+      return "Win for player2";
+    }
   }
 
   private getScoreBoard(player1Score: number, player2Score: number) {
