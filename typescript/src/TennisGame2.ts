@@ -13,41 +13,18 @@ export class TennisGame2 implements TennisGame {
 
   getScore(): string {
     let score: string = '';
-    if (this.player1Score === this.player2Score && this.player1Score < 4) {
-      if (this.player1Score === 0)
-        score = 'Love';
-      if (this.player1Score === 1)
-        score = 'Fifteen';
-      if (this.player1Score === 2)
-        score = 'Thirty';
-      score += '-All';
-    }
-    if (this.player1Score === this.player2Score && this.player1Score >= 3)
-      score = 'Deuce';
+    score = this.sameScoreCase(score);
 
-    if (this.player1Score > 0 && this.player2Score === 0) {
-      if (this.player1Score === 1)
-        this.player1ScoreText = 'Fifteen';
-      if (this.player1Score === 2)
-        this.player1ScoreText = 'Thirty';
-      if (this.player1Score === 3)
-        this.player1ScoreText = 'Forty';
+    score = this.onePlayHasZeroScoreCase(score);
+    
+    score = this.advantageOrWinCase(score);
 
-      this.player2ScoreText = 'Love';
-      score = this.player1ScoreText + '-' + this.player2ScoreText;
-    }
-    if (this.player2Score > 0 && this.player1Score === 0) {
-      if (this.player2Score === 1)
-        this.player2ScoreText = 'Fifteen';
-      if (this.player2Score === 2)
-        this.player2ScoreText = 'Thirty';
-      if (this.player2Score === 3)
-        this.player2ScoreText = 'Forty';
+    score = this.normalCase(score);
 
-      this.player1ScoreText = 'Love';
-      score = this.player1ScoreText + '-' + this.player2ScoreText;
-    }
+    return score;
+  }
 
+  private normalCase(score: string) {
     if (this.player1Score > this.player2Score && this.player1Score < 4) {
       if (this.player1Score === 2)
         this.player1ScoreText = 'Thirty';
@@ -70,15 +47,55 @@ export class TennisGame2 implements TennisGame {
         this.player1ScoreText = 'Thirty';
       score = this.player1ScoreText + '-' + this.player2ScoreText;
     }
+    return score;
+  }
 
+  private onePlayHasZeroScoreCase(score: string) {
+    if (this.player1Score > 0 && this.player2Score === 0) {
+      if (this.player1Score === 1)
+        this.player1ScoreText = 'Fifteen';
+      if (this.player1Score === 2)
+        this.player1ScoreText = 'Thirty';
+      if (this.player1Score === 3)
+        this.player1ScoreText = 'Forty';
+      this.player2ScoreText = 'Love';
+      score = this.player1ScoreText + '-' + this.player2ScoreText;
+    }
+    if (this.player2Score > 0 && this.player1Score === 0) {
+      if (this.player2Score === 1)
+        this.player2ScoreText = 'Fifteen';
+      if (this.player2Score === 2)
+        this.player2ScoreText = 'Thirty';
+      if (this.player2Score === 3)
+        this.player2ScoreText = 'Forty';
+      this.player1ScoreText = 'Love';
+      score = this.player1ScoreText + '-' + this.player2ScoreText;
+    }
+    return score;
+  }
+
+  private sameScoreCase(score: string) {
+    if (this.player1Score === this.player2Score && this.player1Score < 4) {
+      if (this.player1Score === 0)
+        score = 'Love';
+      if (this.player1Score === 1)
+        score = 'Fifteen';
+      if (this.player1Score === 2)
+        score = 'Thirty';
+      score += '-All';
+    }
+    if (this.player1Score === this.player2Score && this.player1Score >= 3)
+      score = 'Deuce';
+    return score;
+  }
+
+  private advantageOrWinCase(score: string) {
     if (this.player1Score > this.player2Score && this.player2Score >= 3) {
       score = 'Advantage player1';
     }
-
     if (this.player2Score > this.player1Score && this.player1Score >= 3) {
       score = 'Advantage player2';
     }
-
     if (this.player1Score >= 4 && this.player2Score >= 0 && (this.player1Score - this.player2Score) >= 2) {
       score = 'Win for player1';
     }
